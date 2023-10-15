@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{asset('style.css')}}">
+{# si la personne est connecté alors un message est affiché #}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}Bienvenue :{{ app.user.username }}
+{# si la personne est connecté alors le bouton deconnexion apparait #}
+<div class="mb-3">
+    <a href="{{ path('app_logout') }}"class="buttoncard"><span>Deconnexion</span></a>
+</div>
+{% else %}
+<a href="{{ path('app_register') }}"class="buttoncard"><span>Inscription</span></a>
+<a href="{{ path('app_login') }}"class="buttoncard"><span>Connexion</span></a>
+{% endif %}
+<a href="{{ path('app_contact') }}"class="buttoncard"><span>Contact</span></a>
+{{ form_start(form) }}
+<div class="form-row align-items-end" >
+<div class="col">
+{{ form_row(form.title) }}
+    </div>
+    <div class="col">
+    <div class="form-group">
+    <button type="submit" class="btn btn-success">Rechercher</button>
+    </div>
+    </div>
+    </div>
+{{ form_end(form) }}
+    <div class="card-parent">
+{% for livre in livres %}
+  <div class="card">
+  <img src="{{livre.image}}" alt="">
+  <p>{{livre.title}}</p>
+  {# <a href="{{ path('app_single_book, {id: article.id}) }}" class="buttoncard" > #}
+  <p>{{livre.author}}</p> 
+  <p>{{livre.category}}</p> 
+  <p>Dates de publication : {{livre.date}}</p> 
+{% if livre.quantity == 0 %}
+    <p>rupture de stock</p>
+  {% else %}
+    <p>Disponible</p>
+  {% endif %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}
